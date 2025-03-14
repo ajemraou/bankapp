@@ -19,4 +19,8 @@ sqlc:
 purge:
 	docker stop pg
 	docker rm pg
-.PHONY: postgres createdb dropdb purge
+
+test:
+	go test -v -cover ./...
+
+.PHONY: postgres createdb dropdb purge test
