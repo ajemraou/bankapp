@@ -3,24 +3,30 @@ package api
 import (
 	db "github.com/ajemraou/bankapp/db/sqlc"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 // Server serves HTTP requests for our banking service.
 type Server struct {
-	store *db.Store
+	store  db.Store
 	router *gin.Engine
 }
 
-// NewServer creates a new HTTP server and setup routing
-func NewServer(store *db.Store) *Server {
+// NewServer creates a new HTTP server and set up routing.
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
-	router.POST("/accounts", server.CreateAccount)
-	router.GET("/accounts", server.listAccount)
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("currency", validCurrency)
+	}
+
+	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
-	router.DELETE("/accounts/:id", server.deleteAccount)
-	router.PATCH("/accounts/:id", server.updateAccount)
+	router.GET("/accounts", server.listAccounts)
+
+	router.POST("/transfers", server.createTransfer)
 
 	server.router = router
 	return server
