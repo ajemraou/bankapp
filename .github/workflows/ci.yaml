@@ -2,14 +2,18 @@ name: ci-test
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - develop
+      - feature/*
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+      - develop
 
 jobs:
-
   test:
-    name: Test
+    name: Run Tests
     runs-on: ubuntu-latest
 
     services:
@@ -28,7 +32,6 @@ jobs:
           --health-retries 5
 
     steps:
-
     - name: Set up Go 1.x
       uses: actions/setup-go@v2
       with:
@@ -47,5 +50,5 @@ jobs:
     - name: Run migrations
       run: make migrateup
 
-    - name: Test
+    - name: Run Tests
       run: make test
