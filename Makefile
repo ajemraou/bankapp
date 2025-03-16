@@ -16,6 +16,9 @@ migratedown:
 sqlc:
 	sqlc generate
 
+server:
+	go run main.go
+
 purge:
 	docker stop pg
 	docker rm pg
@@ -23,4 +26,4 @@ purge:
 test:
 	go test -v -cover ./...
 
-.PHONY: postgres createdb dropdb purge test
+.PHONY: postgres createdb dropdb purge test server
