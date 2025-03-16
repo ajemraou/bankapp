@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 postgres:
 	docker run --name pg -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres
 
@@ -13,6 +15,7 @@ migrateup:
 migratedown:
 	migrate -path db/migration/ -database="postgres://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose down
 
+
 sqlc:
 	sqlc generate
 
@@ -26,4 +29,7 @@ purge:
 test:
 	go test -v -cover ./...
 
-.PHONY: postgres createdb dropdb purge test server
+mock:
+	mockgen -package mockdb -destination=./db/mock/store.go github.com/ajemraou/bankapp/db/sqlc Store
+
+.PHONY: postgres createdb dropdb purge test server mock
