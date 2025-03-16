@@ -37,6 +37,12 @@ jobs:
         go-version: ^1.15
       id: go
 
+    - name: Create .env file from secrets
+      run: |
+        echo "DB_SOURCE=${{ bankapp_env.DB_SOURCE }}" > app.env
+        echo "DB_DRIVER=bankapp_env.DB_DRIVER" >> .env
+        echo "SERVER_ADDRESS=bankapp_env.SERVER_ADDRESS" >> .env
+
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
