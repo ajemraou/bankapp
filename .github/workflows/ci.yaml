@@ -37,20 +37,6 @@ jobs:
         go-version: ^1.15
       id: go
 
-    - name: Create .env file from secrets
-      run: |
-        echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" > app.env
-        echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
-        echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
-        ls -la && cat app.env
-
-    - name: Verify .env File
-      run: |
-        echo "DB_SOURCE=$(head -c 10 app.env)..."
-        echo "DB_DRIVER=$(head -c 10 app.env)..."  
-        echo "SERVER_ADDRESS=$(head -c 10 app.env)..."
-        cat app.env | wc -c
-    
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
@@ -59,6 +45,12 @@ jobs:
         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.12.2/migrate.linux-amd64.tar.gz | tar xvz
         sudo mv migrate.linux-amd64 /usr/bin/migrate
         which migrate
+
+    - name: Create .env file from secrets
+      run: |
+        echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" > app.env
+        echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
 
     - name: Run migrations
       run: make migrateup
