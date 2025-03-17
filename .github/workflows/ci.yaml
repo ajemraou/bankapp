@@ -55,8 +55,5 @@ jobs:
     - name: Run migrations
       run: make migrateup
       
-    - name: Verify .env Location
-      run: make tst
-      
     - name: Run Tests
       run: make test
