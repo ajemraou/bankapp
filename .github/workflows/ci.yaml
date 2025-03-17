@@ -50,7 +50,10 @@ jobs:
         echo "DB_DRIVER=$(head -c 10 app.env)..."  
         echo "SERVER_ADDRESS=$(head -c 10 app.env)..."
         cat app.env | wc -c
-      
+    
+    - name: Verify .env Location
+      run: ls -lah $GITHUB_WORKSPACE
+    
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
