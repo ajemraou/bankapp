@@ -52,7 +52,7 @@ jobs:
         cat app.env | wc -c
     
     - name: Verify .env Location
-      run: ls -lah $GITHUB_WORKSPACE
+      run: make tst
     
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
