@@ -51,6 +51,10 @@ jobs:
         echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" > app.env
         echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
         echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.DB_USER }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.DB_PASSWORD }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
 
     - name: Run migrations
       run: make migrateup
