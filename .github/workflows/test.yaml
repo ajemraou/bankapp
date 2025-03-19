@@ -1,17 +1,20 @@
-name: ci-test
+name: Run unit-tests
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - develop
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+      - develop
 
 jobs:
-
   test:
-    name: Test
+    name: Run Tests
     runs-on: ubuntu-latest
-
+  
     services:
       postgres:
         image: postgres
@@ -28,7 +31,6 @@ jobs:
           --health-retries 5
 
     steps:
-
     - name: Set up Go 1.x
       uses: actions/setup-go@v2
       with:
@@ -44,8 +46,18 @@ jobs:
         sudo mv migrate.linux-amd64 /usr/bin/migrate
         which migrate
 
+    - name: Create .env file from secrets
+      run: |
+        echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" > app.env
+        echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
+        echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
+        echo "DB_USER=${{ secrets.DB_USER }}" >> app.env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> app.env
+        echo "TOKEN_SYMMETRIC_KEY=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
+        echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
+
     - name: Run migrations
       run: make migrateup
-
-    - name: Test
+      
+    - name: Run Tests
       run: make test
