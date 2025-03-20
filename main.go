@@ -4,18 +4,18 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/lib/pq"
-
 	"github.com/ajemraou/bankapp/api"
 	db "github.com/ajemraou/bankapp/db/sqlc"
 	"github.com/ajemraou/bankapp/util"
+	_ "github.com/lib/pq"
 )
 
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
-		log.Fatal("cannot load config")
+		log.Fatal("cannot load config:", err)
 	}
+
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
@@ -26,9 +26,9 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot create server:", err)
 	}
+
 	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
 	}
-
 }

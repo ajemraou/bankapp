@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
-// diffrenet tpye of error returned by the VerifyToken function
+// different tpyes of error returned by the VerifyToken function
 var (
 	ErrInvalidToken = errors.New("token is invalid")
-	ErrTokenExpired = errors.New("token is expired")
+	ErrTokenExpired = errors.New("token has expired")
 )
 
 // Payload contains the payload data of the token

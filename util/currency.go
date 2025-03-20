@@ -4,13 +4,13 @@ package util
 const (
 	USD = "USD"
 	EUR = "EUR"
-	CAD = "CAD"
+	MAD = "MAD"
 )
 
 // IsSupportedCurrency returns true if the currency is supported
 func IsSupportedCurrency(currency string) bool {
 	switch currency {
-	case USD, EUR, CAD:
+	case USD, EUR, MAD:
 		return true
 	}
 	return false
