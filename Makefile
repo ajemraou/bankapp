@@ -33,8 +33,7 @@ purge:
 	docker rm pg
 
 test:
-	go test -v ./... -count=1
-	echo "done!"
+	go test -v -cover ./... -count=1
 
 mock:
 	mockgen -package mockdb -destination=./db/mock/store.go github.com/ajemraou/bankapp/db/sqlc Store
