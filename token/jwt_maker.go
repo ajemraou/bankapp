@@ -1,8 +1,8 @@
 package token
 
 import (
-	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -37,26 +37,30 @@ func (maker *JWTMaker) CreateToken(username string, duration time.Duration) (str
 	return jwtToken.SignedString([]byte(maker.secretKey))
 }
 
-// VerifyToken checks if the token is valid or not and returns the payload
+
 func (maker *JWTMaker) VerifyToken(tokenString string) (*Payload, error) {
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
-		// Ensure the signing method is HMAC
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, ErrInvalidToken
 		}
 		return []byte(maker.secretKey), nil
 	}
-	token, err := jwt.ParseWithClaims(tokenString, &Payload{}, keyFunc)
 
+	token, err := jwt.ParseWithClaims(tokenString, &Payload{}, keyFunc)
 	if err != nil {
-		if errors.Is(err, jwt.ErrTokenExpired) {
-			return nil, ErrTokenExpired
-		}
 		return nil, ErrInvalidToken
 	}
 
 	claims, ok := token.Claims.(*Payload)
 	if !ok {
+		return nil, ErrInvalidToken
+	}
+
+	// Check if the token is expired
+	if err := claims.Valid(); err != nil {
+		if strings.Contains(err.Error(), "token is expired") {
+			return nil, ErrTokenExpired
+		}
 		return nil, ErrInvalidToken
 	}
 
