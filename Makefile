@@ -5,10 +5,10 @@ postgres:
 	docker run --name pg -p 5432:5432 -e POSTGRES_USER=$(DB_USER) -e POSTGRES_PASSWORD=$(DB_PASSWORD) -d postgres
 
 createdb:
-	docker exec -it pg createdb --username=$(DB_USER) --owner=$(DB_USER) simple_bank
+	docker exec -it pg createdb --username=$(DB_USER) --owner=$(DB_USER) bankapp
 
 dropdb:
-	docker exec -it pg dropdb simple_bank
+	docker exec -it pg dropdb bankapp
 
 migrateup1:
 	migrate -path db/migration/ -database="$(DB_SOURCE)" -verbose up 1
